@@ -12,48 +12,55 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.videoapp.R
 import com.example.videoapp.adapter.AdapterImage
+import com.example.videoapp.adapter.AdapterVideo
 import com.example.videoapp.adapter.HeaderAdapter
 import com.example.videoapp.databinding.MainFragmentBinding
 import com.example.videoapp.model.Pics
+import com.example.videoapp.model.VideoConfig
 import com.example.videoapp.view_model.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainFragment : Fragment(R.layout.main_fragment) {
-    companion object {
-        fun newInstance() = MainFragment()
-    }
+class MainFragment(private val itemTypeApp: ItemTypeApp) : Fragment(R.layout.main_fragment) {
 
     private lateinit var binding: MainFragmentBinding
     private lateinit var viewModel: MainViewModel
 
     lateinit var adapters: ConcatAdapter
     private val adapterImage = AdapterImage()
+    private val adapterVideo = AdapterVideo()
     private val adapterHeader = HeaderAdapter {
-        viewModel.getAllPics(it)
+        if (itemTypeApp == ItemTypeApp.VIDEO) viewModel.getVideo(it) else viewModel.getAllPics(it)
     }
     private val observerImages = Observer<List<Pics>> {
         adapterImage.submitList(it)
+    }
+    private val observerVideo = Observer<List<VideoConfig>> {
+        adapterVideo.submitList(it)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         binding = MainFragmentBinding.bind(view)
-        adapters = ConcatAdapter(adapterHeader, adapterImage)
+        adapters =
+            if (itemTypeApp == ItemTypeApp.VIDEO) ConcatAdapter(adapterHeader, adapterVideo) else ConcatAdapter(
+                adapterHeader,
+                adapterImage
+            )
         startObservers()
         startRecyclerView()
     }
-    
+
     private fun startObservers() {
         viewModel.pics.observe(viewLifecycleOwner, observerImages)
+        viewModel.videos.observe(viewLifecycleOwner, observerVideo)
     }
 
 
     private fun startRecyclerView() = binding.recyclerVIewSreen.apply {
         adapter = adapters
         layoutManager = LinearLayoutManager(requireContext())
-        viewModel.getAllPics()
         addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -61,6 +68,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
             }
         })
+        if (itemTypeApp == ItemTypeApp.VIDEO) viewModel.getVideo() else viewModel.getAllPics()
     }
 
     fun View.hideSoftInput() {
@@ -69,4 +77,9 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
     }
 
+}
+
+enum class ItemTypeApp {
+    VIDEO,
+    IMAGE
 }
