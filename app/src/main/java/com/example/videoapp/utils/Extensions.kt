@@ -6,14 +6,13 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.videoapp.R
+import com.example.videoapp.view.fragment.ItemTypeApp
+import com.example.videoapp.view.fragment.MainFragment
 
 
-fun AppCompatActivity.replaceFragment(
-    fragment: Fragment,
-    @IdRes idComponent: Int = R.id.container
-) {
+fun AppCompatActivity.replaceFragment(type: ItemTypeApp) {
     supportFragmentManager.beginTransaction()
-        .replace(idComponent, fragment)
+        .replace(R.id.container, MainFragment(type))
         .commitNow()
 }
 

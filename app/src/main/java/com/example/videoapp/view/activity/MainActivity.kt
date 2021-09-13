@@ -18,20 +18,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
-        setContentView(R.layout.main_activity)
+        setContentView(binding.root)
 
         binding.toggleButtonGroup.check(R.id.buttonImage)
         binding.toggleButtonGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             when (checkedId) {
-                R.id.buttonImage -> replaceFrag(ItemTypeApp.IMAGE)
-                R.id.buttonVideos -> replaceFrag(ItemTypeApp.VIDEO)
+                R.id.buttonImage -> replaceFragment(ItemTypeApp.IMAGE)
+                R.id.buttonVideos -> replaceFragment(ItemTypeApp.VIDEO)
             }
         }
-        replaceFrag(ItemTypeApp.VIDEO)
+
+        replaceFragment(ItemTypeApp.IMAGE)
     }
 
-    fun replaceFrag(feedType: ItemTypeApp) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, MainFragment(feedType)).commitNow()
-    }
 }
