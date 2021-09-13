@@ -36,7 +36,7 @@ class AdapterImage : ListAdapter<Pics, RecyclerView.ViewHolder>(ImageDiiffCallBa
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == 2) {
+        return if (position % 4 == 0 && position != 0 ){
             ADS_VIEW
         } else {
             NORMAL_VIEW

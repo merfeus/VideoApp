@@ -20,7 +20,9 @@ class MainViewModel @Inject constructor(private val repository: PicsRepository) 
     private val _VIDEOS = MutableLiveData<List<VideoConfig>>()
     val videos: LiveData<List<VideoConfig>> = _VIDEOS
 
-    fun getAllPics(query: String = "Vida") {
+    private val home = listOf("Vida", "Natureza", "Praia", "Lua")
+
+    fun getAllPics(query: String = home.random()) {
         viewModelScope.launch {
             repository.getAllPicsService(query = query).let {
                 _IMG.value = it
@@ -29,7 +31,7 @@ class MainViewModel @Inject constructor(private val repository: PicsRepository) 
         }
     }
 
-    fun getVideo(query: String = "Praia"){
+    fun getVideo(query: String = home.random()) {
         viewModelScope.launch {
             repository.getALlVideoService(query = query).let {
                 _VIDEOS.value = it
@@ -37,7 +39,4 @@ class MainViewModel @Inject constructor(private val repository: PicsRepository) 
         }
     }
 
-}
-enum class RandoTitle
-    l
 }

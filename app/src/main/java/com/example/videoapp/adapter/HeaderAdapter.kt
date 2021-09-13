@@ -34,7 +34,7 @@ class HeaderViewHolder(item: View, val onTap: (String) -> Unit) : RecyclerView.V
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 p0?.let {
-                    if (it.length > 2) {onTap(it.toString())
+                    if (it.length > 3) {onTap(it.toString())
                     }
                 }
             }
