@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,11 +18,16 @@ import com.example.videoapp.adapter.HeaderAdapter
 import com.example.videoapp.databinding.MainFragmentBinding
 import com.example.videoapp.model.Pics
 import com.example.videoapp.model.VideoConfig
+import com.example.videoapp.service.notification.NotificationHandler
 import com.example.videoapp.view_model.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment(private val itemTypeApp: ItemTypeApp) : Fragment(R.layout.main_fragment) {
+
+    @Inject
+    lateinit var notificationHandler: NotificationHandler
 
     private lateinit var binding: MainFragmentBinding
     private lateinit var viewModel: MainViewModel
@@ -44,12 +50,19 @@ class MainFragment(private val itemTypeApp: ItemTypeApp) : Fragment(R.layout.mai
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         binding = MainFragmentBinding.bind(view)
         adapters =
-            if (itemTypeApp == ItemTypeApp.VIDEO) ConcatAdapter(adapterHeader, adapterVideo) else ConcatAdapter(
+            if (itemTypeApp == ItemTypeApp.VIDEO) ConcatAdapter(
+                adapterHeader,
+                adapterVideo
+            ) else ConcatAdapter(
                 adapterHeader,
                 adapterImage
             )
         startObservers()
         startRecyclerView()
+
+        binding.buttonNotification.setOnClickListener {
+            showNotification()
+        }
     }
 
     private fun startObservers() {
@@ -75,6 +88,13 @@ class MainFragment(private val itemTypeApp: ItemTypeApp) : Fragment(R.layout.mai
         val inputMethodManager =
             context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
+    }
+
+    fun showNotification() {
+        notificationHandler.createNotification("Se liga", "Novas imagens disponiveis \uD83D\uDE09.").run {
+            val notificationManager = NotificationManagerCompat.from(requireContext())
+            notificationManager.notify(1, this)
+        }
     }
 
 }

@@ -7,9 +7,22 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.MainFragment">
 
+   <Button
+       android:id="@+id/buttonNotification"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="New Notification"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent" />
+
    <androidx.recyclerview.widget.RecyclerView
        android:id="@+id/recyclerVIewSreen"
        android:layout_width="match_parent"
-       android:layout_height="match_parent"/>
+       android:layout_height="0dp"
+       app:layout_constraintBottom_toTopOf="@+id/buttonNotification"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
