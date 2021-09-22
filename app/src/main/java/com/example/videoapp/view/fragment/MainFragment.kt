@@ -91,10 +91,11 @@ class MainFragment(private val itemTypeApp: ItemTypeApp) : Fragment(R.layout.mai
     }
 
     fun showNotification() {
-        notificationHandler.createNotification("Se liga", "Novas imagens disponiveis \uD83D\uDE09.").run {
-            val notificationManager = NotificationManagerCompat.from(requireContext())
-            notificationManager.notify(1, this)
-        }
+        notificationHandler.createNotification("Se liga", "Novas imagens disponiveis \uD83D\uDE09.")
+            .let {
+                val notificationManager = NotificationManagerCompat.from(requireContext())
+                notificationManager.notify(1, it)
+            }
     }
 
 }

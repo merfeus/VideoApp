@@ -48,6 +48,7 @@ class NotificationHandler @Inject constructor(private val context: Context) {
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_baseline_circle_notifications_24)
             .setContentTitle(title)
+            .setVibrate(longArrayOf(400))
             .setContentText(message)
             .setContentIntent(createPendingIntent())
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
