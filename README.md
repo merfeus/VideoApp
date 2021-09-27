@@ -1,3 +1,3 @@
 # VideoApp
 
-Install Aplication (Here)(apk/VideoApp.apk)
+Install Aplication (apk/VideoApp.apk)(Here)
