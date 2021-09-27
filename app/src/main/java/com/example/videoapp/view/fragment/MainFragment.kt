@@ -21,7 +21,9 @@ import com.example.videoapp.model.VideoConfig
 import com.example.videoapp.service.notification.NotificationHandler
 import com.example.videoapp.view_model.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
 import javax.inject.Inject
+import kotlinx.coroutines.withContext as withContext
 
 @AndroidEntryPoint
 class MainFragment(private val itemTypeApp: ItemTypeApp) : Fragment(R.layout.main_fragment) {
@@ -60,9 +62,13 @@ class MainFragment(private val itemTypeApp: ItemTypeApp) : Fragment(R.layout.mai
         startObservers()
         startRecyclerView()
 
-        binding.buttonNotification.setOnClickListener {
-            showNotification()
-        }
+          val retornoNot = CoroutineScope(Dispatchers.Main).async{
+              showNotification()
+          }
+            CoroutineScope(Dispatchers.Main).launch {
+                retornoNot.await()
+            }
+
     }
 
     private fun startObservers() {
@@ -90,14 +96,14 @@ class MainFragment(private val itemTypeApp: ItemTypeApp) : Fragment(R.layout.mai
         inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
     }
 
-    fun showNotification() {
-        notificationHandler.createNotification("Se liga", "Novas imagens disponiveis \uD83D\uDE09.")
+  suspend  fun showNotification() {
+      delay(3000)
+        notificationHandler.createNotification("Se liga", "Novas imagens disponiveis \uD83D\uDE09")
             .let {
                 val notificationManager = NotificationManagerCompat.from(requireContext())
                 notificationManager.notify(1, it)
             }
     }
-
 }
 
 enum class ItemTypeApp {

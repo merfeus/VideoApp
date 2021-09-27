@@ -13,10 +13,10 @@ class NotificationWorkMenage(appContext: Context, workerParameters: WorkerParame
     override fun doWork(): Result {
 
         notificationHandler.createNotification(
-            "Se liga", "Novas imagens disponiveis \uD83D\uDE09."
+            "Se liga", "Novas imagens disponiveis \uD83D\uDE09"
         ).let {
             NotificationManagerCompat.from(applicationContext)
-                .notify((0..999).random(), it)
+                .notify(1, it)
         }
         return Result.success()
     }
